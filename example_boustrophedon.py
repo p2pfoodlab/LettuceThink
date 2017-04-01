@@ -16,20 +16,14 @@
 """
 
 import lettucehoe as lh
-import cv2
-import time
 
 fname="data/pics/OH.jpg"
-im=cv2.imread(fname)
+im=lh.cv2.imread(fname)
+
 #Workspace parameters [x0, y0, dx, dy]
 ws_par=[970, 140, 700,500]
 tool_size=50
 
-t0=time.time()
 omask=lh.plantmask(im, ws_par, tool_size)
-t1=time.time()
-print t1-t0
 toolPath=lh.mod_boustrophedon(omask, im, tool_size, ws_par)
-print time.time()-t1
 lh.np.savetxt("data/toolPath.txt", toolPath)
-

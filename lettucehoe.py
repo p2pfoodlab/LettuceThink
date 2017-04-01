@@ -19,7 +19,6 @@
 
 import cv2
 import numpy as np
-import cv2.ximgproc as xcv2
 
 def exgreen(im_BGR):
    Ms=np.max(im_BGR,axis=(0,1)).astype(np.float) 
