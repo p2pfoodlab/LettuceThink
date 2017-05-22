@@ -94,14 +94,14 @@ def cnc_update_position(newx, newy, newz):
         print pos
         set_cnc_position(float(pos[0]) / 10,
                          float(pos[1]) / 10,
-                         float(pos[2]) / 10)
+                         -float(pos[2]) / 10)
     else:
         set_cnc_position(newx, newy, newz)
     return
 
 def cnc_moveto(newx, newy, newz):
     # tell CNC to move to new position
-    cnc_send_cmd("G0 x%s y%s z%s\n"%(int(10*newx), int(10*newy), int(10*newz)))
+    cnc_send_cmd("G0 x%s y%s z%s\n"%(int(10*newx), int(10*newy), -int(10*newz)))
     # wait for reply from CNC
     cnc_send_cmd("G4 P1")
     # update new position
@@ -316,7 +316,6 @@ def clamp(n, minn, maxn):
         return maxn
     else:
         return n
-
 
 ############################################################
 
