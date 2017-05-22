@@ -26,6 +26,10 @@ from flask import send_file
 import datetime
 import serial
 import time
+import DepthSense as DS
+import cv2
+import numpy as np
+import os
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -60,7 +64,7 @@ def set_camera_position(newpan, newtilt):
     tilt = newtilt
 
 ############################################################
-# CNC, camera and scanning functions
+# CNC functions
 
 cnc = 0;
 
@@ -122,6 +126,9 @@ def cnc_stop():
 ############################################################
 # camera functions
 
+ds = DS.initDepthSense()
+imdir = "static/img"
+
 def camera_homing():
     return
 
@@ -135,12 +142,30 @@ def camera_moveto(newpan, newtilt):
     set_camera_position(newpan, newtilt)
     return
 
-def grab_rgb_image(filename):
-    # TODO
-    return
+def grab_images():
+    im = DS.getColourMap()
+    cv2.imwrite("%s/rgb.png"%(imdir), im)   
+    
+    im = DS.getDepthMap()
+    cv2.imwrite("%s/depth.png"%(imdir), im)   
 
-def grab_depth_image(filename):
-    # TODO
+    im = DS.getConfidenceMap()
+    cv2.imwrite("%s/confidence.png"%(imdir), im)   
+    
+    im = DS.getDepthColouredMap()
+    cv2.imwrite("%s/rgbd.png"%(imdir), im)   
+    
+    im = DS.getGreyScaleMap()
+    cv2.imwrite("%s/gscale.png"%(imdir), im)   
+    
+    im = DS.getSyncMap()
+    np.save("%s/sync"%(imdir), im)   
+    
+    im = DS.getUVMap()
+    np.save("%s/uv"%(imdir), im)   
+    
+    im = DS.getVertices()
+    np.save("%s/vert"%(imdir), im)   
     return
 
 ############################################################
@@ -289,18 +314,17 @@ def rest_squarescan():
                "position": get_position() }
     return jsonify(result)
 
+@app.route('/grab')
+def rest_grab():
+    grab_images()
+    return
+
 @app.route('/rgb.png')
 def rest_rgb():
-    d = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-    filename = "static/img/rgb-" + d + ".png" 
-    grab_rgb_image(filename)
     return send_file("static/img/rgb.png", mimetype='image/png')
 
 @app.route('/depth.png')
 def rest_depth():
-    d = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-    filename = "static/img/depth-" + d + ".png" 
-    grab_depth_image(filename)
     return send_file("static/img/depth.png", mimetype='image/png')
 
 ############################################################
