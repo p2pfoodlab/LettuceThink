@@ -50,7 +50,7 @@ function set_position(p)
     xypanTriangle.set('angle', 180 + position.pan);
     xypanTriangle.setCoords();
     xypanCanvas.renderAll();
-    ztiltTriangle.setTop(155 - 10 * position.z);
+    ztiltTriangle.setTop(130 - 10 * position.z);
     ztiltTriangle.set('angle', 90 + position.tilt);
     ztiltTriangle.setCoords();
     ztiltCanvas.renderAll();
@@ -160,7 +160,7 @@ function zChangedHandler(evt)
     var pt = movingObject.getCenterPoint();
     set_position2({'x': position.x,
                    'y': position.y,
-                   'z': (155 - pt.y) / 10,
+                   'z': (130 - pt.y) / 10,
                    'pan': position.pan,
                    'tilt': position.tilt });
 };

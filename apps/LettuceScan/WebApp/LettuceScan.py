@@ -170,7 +170,7 @@ def index():
 def rest_moveto():
     newx = clamp(float(request.form['x']), 0.0, 80.0)
     newy = clamp(float(request.form['y']), 0.0, 80.0)
-    newz = clamp(float(request.form['z']), 0.0, 15.0)
+    newz = clamp(float(request.form['z']), 0.0, 10.0)
     newpan = clamp(float(request.form['pan']), -360.0, 360.0)
     newtilt = clamp(float(request.form['tilt']), -90.0, 90.0)
     cnc_moveto(newx, newy, newz)
@@ -191,7 +191,7 @@ def rest_move():
         dz = float(request.form['dz'])
     x = clamp(p['x'] + dx, 0.0, 80.0)
     y = clamp(p['y'] + dy, 0.0, 80.0)
-    z = clamp(p['z'] + dz, 0.0, 15.0)
+    z = clamp(p['z'] + dz, 0.0, 10.0)
     cnc_moveto(x, y, z)
     return jsonify(get_position())
 
@@ -239,7 +239,7 @@ def rest_circularscan():
     if ((r < 1) or (r > 40)
         or (xc - r < 0) or (xc + r > 80)
         or (yc - r < 0) or (yc + r > 80)
-        or (zc < 0) or (zc > 15)
+        or (zc < 0) or (zc > 10)
         or (nc < 1) or (nc > 360)):
         return error_message("invalid parameters");
     circularscan(xc, yc, zc, r, nc)
@@ -279,7 +279,7 @@ def rest_squarescan():
     if ((d < 1) or (d > 40)
         or (xs - d < 0) or (xs + d > 80)
         or (ys - d < 0) or (ys + d > 80)
-        or (zs < 0) or (zs > 15)
+        or (zs < 0) or (zs > 10)
         or (ns < 1) or (ns > 30)):
         return error_message("invalid parameters");
     squarescan(xs, ys, zs, d, ns)
