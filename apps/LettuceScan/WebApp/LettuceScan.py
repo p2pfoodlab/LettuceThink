@@ -26,6 +26,7 @@ from flask import send_file
 import datetime
 
 app = Flask(__name__)
+app.run(host='0.0.0.0')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 ############################################################
@@ -64,6 +65,18 @@ def cnc_moveto(newx, newy, newz):
     # wait for reply from CNC
     # extract new position from CNC's reply
     set_cnc_position(newx, newy, newz)
+    return
+
+def cnc_stop():
+    return
+
+def cnc_homing():
+    return
+
+def camera_stop():
+    return
+
+def camera_homing():
     return
 
 def camera_moveto(newpan, newtilt):

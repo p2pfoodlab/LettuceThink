@@ -73,7 +73,7 @@ function show_files(files)
 
 function stop()
 {
-    $.get("/stop");
+    $.get("/lettucescan/stop");
 }
 
 function moveTo() {
@@ -82,14 +82,14 @@ function moveTo() {
                   z: parseFloat(document.getElementById("z").value),
                   pan: parseFloat(document.getElementById("pan").value),
                   tilt: parseFloat(document.getElementById("tilt").value) };
-    $.post("/moveto", coord, function(result){
+    $.post("/lettucescan/moveto", coord, function(result){
         set_position(result);
     });
 }
 
 function move(dx, dy, dz) {
     var coord = { "dx": dx, "dy": dy, "dz": dz }
-    $.post("/move", coord, function(result){
+    $.post("/lettucescan/move", coord, function(result){
         set_position(result);
     });
 }
@@ -101,7 +101,7 @@ function circularScan()
                    zc: parseFloat(document.getElementById("zc").value),
                    r: parseFloat(document.getElementById("r").value),
                    nc: parseInt(document.getElementById("nc").value) };
-    $.post("/circularscan", params, function (result) {
+    $.post("/lettucescan/circularscan", params, function (result) {
         if (result.error) alert(result.message);
         else {
             alert("scan finished");
@@ -118,7 +118,7 @@ function squareScan()
                    zs: parseFloat(document.getElementById("zs").value),
                    d: parseFloat(document.getElementById("d").value),
                    ns: parseInt(document.getElementById("ns").value) };
-    $.post("/squarescan", params, function (result) {
+    $.post("/lettucescan/squarescan", params, function (result) {
         if (result.error) alert(result.message);
         else {
             alert("scan finished");
@@ -130,7 +130,7 @@ function squareScan()
 
 function homing()
 {
-    $.get("/homing");
+    $.get("/lettucescan/homing");
 }
 
 function xyChangedHandler(evt)
@@ -177,8 +177,8 @@ function tiltChangedHandler(evt)
 
 function grabImages()
 {
-    document.getElementById("RGBImage").src = "/rgb.png?d=" + new Date().toISOString();
-    document.getElementById("DepthImage").src = "/depth.png?d=" + new Date().toISOString();
+    document.getElementById("RGBImage").src = "/lettucescan/rgb.png?d=" + new Date().toISOString();
+    document.getElementById("DepthImage").src = "/lettucescan/depth.png?d=" + new Date().toISOString();
 }
 
 function initControllerButton(svg, id, dx, dy, dz)
@@ -227,7 +227,7 @@ function initApp()
     //a.addEventListener("load", initController, false);
     initController();
     
-    $.get("/position", function(result){
+    $.get("/lettucescan/position", function(result){
         set_position(result);
     });
     
