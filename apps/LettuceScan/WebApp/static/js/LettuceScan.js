@@ -163,7 +163,7 @@ function xypanChangedHandler(evt)
                    'z': position.z,
                    'pan': movingObject.get('angle') - 180,
                    'tilt': position.tilt });
-    moveto();
+    moveTo();
 }
 
 function zChangingHandler(evt)
@@ -196,7 +196,7 @@ function ztiltChangedHandler(evt)
                    'z': (130 - pt.y) / 10,
                    'pan': position.pan,
                    'tilt': movingObject.get('angle') - 90 });
-    moveto();
+    moveTo();
 }
 
 function grabImages()
