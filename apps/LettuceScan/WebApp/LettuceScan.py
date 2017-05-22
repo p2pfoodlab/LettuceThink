@@ -77,23 +77,26 @@ def cnc_init(port="/dev/ttyUSB0"):
 
 def cnc_send_cmd(cmd):
     global cnc
-    print cmd + " \n"
+    print cmd
     cnc.write(cmd + " \n")
     grbl_out = cnc.readline()
     print ' : ' + grbl_out.strip()
     return grbl_out
 
-def cnc_update_position():
-    cnc.write("$?")
-    pos = cnc.readline()
-    print pos + " \n"
-    start = pos.index("WPos:") + 5
-    end = pos.index(">")
-    pos = pos[start:end].split(",")
-    print pos
-    set_cnc_position(float(pos[0]) / 10,
-                     float(pos[1]) / 10,
-                     float(pos[2]) / 10)
+def cnc_update_position(newx, newy, newz):
+    if False: # Doesn't work, yet
+        cnc.write("$?")
+        pos = cnc.readline()
+        print pos
+        start = pos.index("WPos:") + 5
+        end = pos.index(">")
+        pos = pos[start:end].split(",")
+        print pos
+        set_cnc_position(float(pos[0]) / 10,
+                         float(pos[1]) / 10,
+                         float(pos[2]) / 10)
+    else:
+        set_cnc_position(newx, newy, newz)
     return
 
 def cnc_moveto(newx, newy, newz):
@@ -101,8 +104,8 @@ def cnc_moveto(newx, newy, newz):
     cnc_send_cmd("G0 x%s y%s z%s\n"%(int(10*newx), int(10*newy), int(10*newz)))
     # wait for reply from CNC
     cnc_send_cmd("G4 P1")
-    # get new position
-    cnc_update_position()
+    # update new position
+    cnc_update_position(newx, newy, newz)
     return
 
 def cnc_homing():
@@ -110,7 +113,7 @@ def cnc_homing():
     cnc_send_cmd("g28")
     cnc_send_cmd("g92 x0 y0 z0")
     # get new position
-    cnc_update_position()
+    cnc_update_position(0, 0, 0)
     return
 
 def cnc_stop():
