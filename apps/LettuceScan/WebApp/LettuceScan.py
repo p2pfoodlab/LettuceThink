@@ -96,7 +96,7 @@ def cnc_update_position():
 
 def cnc_moveto(newx, newy, newz):
     # tell CNC to move to new position
-    cnc_send_cmd("G0 x%s y%s y%s\n"%(int(10*newx), int(10*newy), int(10*newz)))
+    cnc_send_cmd("G0 x%s y%s z%s\n"%(int(10*newx), int(10*newy), int(10*newz)))
     # wait for reply from CNC
     cnc_send_cmd("G4 P1")
     # get new position
