@@ -89,7 +89,7 @@ def cnc_update_position():
     start = pos.index("WPos:") + 5
     end = pos.index(">")
     pos = pos[start:end].split(",")
-    set_cnc_position(float(pos[0]), float(pos[1]), float(pos[2])):
+    set_cnc_position(float(pos[0]), float(pos[1]), float(pos[2]))
     return
 
 def cnc_moveto(newx, newy, newz):
