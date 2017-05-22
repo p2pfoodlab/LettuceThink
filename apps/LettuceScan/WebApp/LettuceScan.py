@@ -26,7 +26,6 @@ from flask import send_file
 import datetime
 
 app = Flask(__name__)
-app.run(host='0.0.0.0')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 ############################################################
