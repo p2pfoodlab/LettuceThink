@@ -84,7 +84,8 @@ def cnc_send_cmd(cmd):
     return grbl_out
 
 def cnc_update_position():
-    pos = cnc_send_cmd("$?")
+    cnc.write("$?")
+    pos = cnc.readline()
     start = pos.index("WPos:") + 5
     end = pos.index(">")
     pos = pos[start:end].split(",")
