@@ -45,12 +45,12 @@ function set_position(p)
     document.getElementById("pan").value = position.pan;
     document.getElementById("tilt").value = position.tilt;
 
-    xypanTriangle.setLeft(2 * position.x);
-    xypanTriangle.setTop(200 - 2 * position.y);
+    xypanTriangle.setLeft(160 - 2 * position.x);
+    xypanTriangle.setTop(160 - 2 * position.y);
     xypanTriangle.set('angle', 180 + position.pan);
     xypanTriangle.setCoords();
     xypanCanvas.renderAll();
-    ztiltTriangle.setTop(175 - 10 * position.z);
+    ztiltTriangle.setTop(155 - 10 * position.z);
     ztiltTriangle.set('angle', 90 + position.tilt);
     ztiltTriangle.setCoords();
     ztiltCanvas.renderAll();
@@ -137,8 +137,8 @@ function xyChangedHandler(evt)
 {
     var movingObject = evt.target;
     var pt = movingObject.getCenterPoint();
-    set_position2({'x': pt.x / 2,
-                   'y': 100 - pt.y / 2,
+    set_position2({'x': 80 - pt.x / 2,
+                   'y': 80 - pt.y / 2,
                    'z': position.z,
                    'pan': position.pan,
                    'tilt': position.tilt });
@@ -160,7 +160,7 @@ function zChangedHandler(evt)
     var pt = movingObject.getCenterPoint();
     set_position2({'x': position.x,
                    'y': position.y,
-                   'z': (175 - pt.y) / 10,
+                   'z': (155 - pt.y) / 10,
                    'pan': position.pan,
                    'tilt': position.tilt });
 };
@@ -234,7 +234,7 @@ function initApp()
     xypanCanvas = new fabric.Canvas('XYPanView');
     xypanTriangle = new fabric.Triangle({
     width: 16, height: 32, fill: 'blue',
-        left: 100, top: 100,
+        left: 80, top: 80,
         originX: "center",
         originY: "center",
         hasBorders: true,
@@ -261,7 +261,7 @@ function initApp()
     ztiltCanvas = new fabric.Canvas('ZTiltView');
     ztiltTriangle = new fabric.Triangle({
     width: 16, height: 32, fill: 'blue',
-        left: 20, top: 100,
+        left: 20, top: 80,
         originX: "center",
         originY: "center",
         hasBorders: true,

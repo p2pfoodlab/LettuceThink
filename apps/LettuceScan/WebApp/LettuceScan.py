@@ -322,7 +322,6 @@ def clamp(n, minn, maxn):
 
 def lettucescan_init(app):
     cnc_init("/dev/ttyUSB0")
-    cnc_homing()
 
 lettucescan_init(app)
 
