@@ -29,8 +29,6 @@ import time
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-cnc_init("/dev/ttyUSB0")
-cnc_homing()
 
 
 ############################################################
@@ -309,3 +307,15 @@ def clamp(n, minn, maxn):
         return maxn
     else:
         return n
+
+
+############################################################
+
+def lettucescan_init(app):
+    cnc_init("/dev/ttyUSB0")
+    cnc_homing()
+
+lettucescan_init(app)
+
+if __name__ == '__main__':
+    app.run()
