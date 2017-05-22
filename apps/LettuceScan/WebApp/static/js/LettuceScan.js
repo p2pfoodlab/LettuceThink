@@ -158,11 +158,12 @@ function xypanChangedHandler(evt)
 {
     var movingObject = evt.target;
     var pt = movingObject.getCenterPoint();
-    set_position({'x': 80 - pt.x / 2,
+    set_position2({'x': 80 - pt.x / 2,
                   'y': 80 - pt.y / 2,
-                  'z': position.z,
-                  'pan': movingObject.get('angle') - 180,
-                  'tilt': position.tilt });
+                   'z': position.z,
+                   'pan': movingObject.get('angle') - 180,
+                   'tilt': position.tilt });
+    moveto();
 }
 
 function zChangingHandler(evt)
@@ -190,11 +191,12 @@ function ztiltChangedHandler(evt)
 {
     var movingObject = evt.target;
     var pt = movingObject.getCenterPoint();
-    set_position({'x': position.x,
-                  'y': position.y,
-                  'z': (130 - pt.y) / 10,
-                  'pan': position.pan,
-                  'tilt': movingObject.get('angle') - 90 });
+    set_position2({'x': position.x,
+                   'y': position.y,
+                   'z': (130 - pt.y) / 10,
+                   'pan': position.pan,
+                   'tilt': movingObject.get('angle') - 90 });
+    moveto();
 }
 
 function grabImages()
