@@ -100,7 +100,7 @@ def cnc_moveto(newx, newy, newz):
     # wait for reply from CNC
     cnc_send_cmd("G4 P1")
     # get new position
-    cnc_update_position()
+    #cnc_update_position()
     return
 
 def cnc_homing():
