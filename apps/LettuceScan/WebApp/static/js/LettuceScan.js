@@ -133,7 +133,7 @@ function homing()
     $.get("/lettucescan/homing");
 }
 
-function xyChangedHandler(evt)
+function xyChangingHandler(evt)
 {
     var movingObject = evt.target;
     var pt = movingObject.getCenterPoint();
@@ -144,7 +144,7 @@ function xyChangedHandler(evt)
                    'tilt': position.tilt });
 };
 
-function panChangedHandler(evt)
+function panChangingHandler(evt)
 {
     var movingObject = evt.target;
     set_position2({'x': position.x,
@@ -154,7 +154,18 @@ function panChangedHandler(evt)
                    'tilt': position.tilt });
 }
 
-function zChangedHandler(evt)
+function xypanChangedHandler(evt)
+{
+    var movingObject = evt.target;
+    var pt = movingObject.getCenterPoint();
+    set_position({'x': 80 - pt.x / 2,
+                  'y': 80 - pt.y / 2,
+                  'z': position.z,
+                  'pan': movingObject.get('angle') - 180,
+                  'tilt': position.tilt });
+}
+
+function zChangingHandler(evt)
 {
     var movingObject = evt.target;
     var pt = movingObject.getCenterPoint();
@@ -165,7 +176,7 @@ function zChangedHandler(evt)
                    'tilt': position.tilt });
 };
 
-function tiltChangedHandler(evt)
+function tiltChangingHandler(evt)
 {
     var movingObject = evt.target;
     set_position2({'x': position.x,
@@ -173,6 +184,17 @@ function tiltChangedHandler(evt)
                    'z': position.z,
                    'pan': position.pan,
                    'tilt': movingObject.get('angle') - 90 });
+}
+
+function ztiltChangedHandler(evt)
+{
+    var movingObject = evt.target;
+    var pt = movingObject.getCenterPoint();
+    set_position({'x': position.x,
+                  'y': position.y,
+                  'z': (130 - pt.y) / 10,
+                  'pan': position.pan,
+                  'tilt': movingObject.get('angle') - 90 });
 }
 
 function grabImages()
@@ -255,8 +277,9 @@ function initApp()
     xypanCanvas.add(new fabric.Text('XY and Pan', { 
         left: 4, top: 4, hasControls: false, hasBorders: false, evented: false, fontSize: 12
     }));
-    xypanCanvas.on('object:moving', xyChangedHandler);
-    xypanCanvas.on('object:modified', panChangedHandler);
+    xypanCanvas.on('object:moving', xyChangingHandler);
+    xypanCanvas.on('object:rotating', panChangingHandler);
+    xypanCanvas.on('object:modified', xypanChangedHandler);
 
     ztiltCanvas = new fabric.Canvas('ZTiltView');
     ztiltTriangle = new fabric.Triangle({
@@ -283,7 +306,8 @@ function initApp()
     ztiltCanvas.add(new fabric.Text('Z and Tilt', { 
         left: 4, top: 4, hasControls: false, hasBorders: false, evented: false, fontSize: 12
     }));
-    ztiltCanvas.on('object:moving', zChangedHandler);
-    ztiltCanvas.on('object:modified', tiltChangedHandler);
+    ztiltCanvas.on('object:moving', zChangingHandler);
+    ztiltCanvas.on('object:rotating', tiltChangingHandler);
+    ztiltCanvas.on('object:modified', ztiltChangedHandler);
 
 }
