@@ -24,9 +24,14 @@ from flask import redirect
 from flask import url_for
 from flask import send_file
 import datetime
+import serial
+import time
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+cnc_init("/dev/ttyUSB0")
+cnc_homing()
+
 
 ############################################################
 # Global coordinates of the CNC and camera
@@ -59,23 +64,61 @@ def set_camera_position(newpan, newtilt):
 ############################################################
 # CNC, camera and scanning functions
 
+cnc = 0;
+
+def cnc_init(port="/dev/ttyUSB0"):
+    global cnc
+    cnc = serial.Serial(port, 115200)
+    cnc.write("\r\n\r\n")
+    time.sleep(2)
+    cnc.flushInput()
+    cnc_send_cmd("G90")
+    cnc_send_cmd("G21")
+    return
+
+def cnc_send_cmd(cmd):
+    global cnc
+    print cmd + " \n"
+    cnc.write(cmd + " \n")
+    grbl_out = cnc.readline()
+    print ' : ' + grbl_out.strip()
+    return grbl_out
+
+def cnc_update_position():
+    pos = cnc_send_cmd("$?")
+    start = pos.index("WPos:") + 5
+    end = pos.index(">")
+    pos = pos[start:end].split(",")
+    set_cnc_position(float(pos[0]), float(pos[1]), float(pos[2])):
+    return
+
 def cnc_moveto(newx, newy, newz):
     # tell CNC to move to new position
+    cnc_send_cmd("G0 x%s y%s y%s\n"%(newx, newy, newz))
     # wait for reply from CNC
-    # extract new position from CNC's reply
-    set_cnc_position(newx, newy, newz)
+    cnc_send_cmd("G4 P1")
+    # get new position
+    cnc_update_position()
+    return
+
+def cnc_homing():
+    cnc_send_cmd("$H")
+    cnc_send_cmd("g28")
+    cnc_send_cmd("g92 x0 y0 z0")
+    # get new position
+    cnc_update_position()
     return
 
 def cnc_stop():
     return
 
-def cnc_homing():
+############################################################
+# camera functions
+
+def camera_homing():
     return
 
 def camera_stop():
-    return
-
-def camera_homing():
     return
 
 def camera_moveto(newpan, newtilt):
@@ -85,19 +128,22 @@ def camera_moveto(newpan, newtilt):
     set_camera_position(newpan, newtilt)
     return
 
-def circularscan(xc, yc, zc, r, nc):
-    # TODO
-    return
-
-def squarescan(xs, ys, zs, d, ns):
-    # TODO
-    return
-
 def grab_rgb_image(filename):
     # TODO
     return
 
 def grab_depth_image(filename):
+    # TODO
+    return
+
+############################################################
+# scanning functions
+
+def circularscan(xc, yc, zc, r, nc):
+    # TODO
+    return
+
+def squarescan(xs, ys, zs, d, ns):
     # TODO
     return
 
