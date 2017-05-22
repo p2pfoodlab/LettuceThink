@@ -70,6 +70,7 @@ def cnc_init(port="/dev/ttyUSB0"):
     cnc.write("\r\n\r\n")
     time.sleep(2)
     cnc.flushInput()
+    cnc_homing()
     cnc_send_cmd("G90")
     cnc_send_cmd("G21")
     return
@@ -192,7 +193,7 @@ def rest_position():
 
 @app.route('/homing')
 def rest_homing():
-    # TODO
+    cnc_homing()
     return jsonify(get_position())
 
 @app.route('/stop')
