@@ -89,12 +89,14 @@ def cnc_update_position():
     start = pos.index("WPos:") + 5
     end = pos.index(">")
     pos = pos[start:end].split(",")
-    set_cnc_position(float(pos[0]), float(pos[1]), float(pos[2]))
+    set_cnc_position(float(pos[0]) / 10,
+                     float(pos[1]) / 10,
+                     float(pos[2]) / 10)
     return
 
 def cnc_moveto(newx, newy, newz):
     # tell CNC to move to new position
-    cnc_send_cmd("G0 x%s y%s y%s\n"%(newx, newy, newz))
+    cnc_send_cmd("G0 x%s y%s y%s\n"%(int(10*newx), int(10*newy), int(10*newz)))
     # wait for reply from CNC
     cnc_send_cmd("G4 P1")
     # get new position
