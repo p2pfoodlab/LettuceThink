@@ -164,6 +164,7 @@ function xypanChangedHandler(evt)
                    'pan': movingObject.get('angle') - 180,
                    'tilt': position.tilt });
     moveTo();
+    grabImages();
 }
 
 function zChangingHandler(evt)
@@ -197,18 +198,25 @@ function ztiltChangedHandler(evt)
                    'pan': position.pan,
                    'tilt': movingObject.get('angle') - 90 });
     moveTo();
+    grabImages();
 }
 
 function grabImages()
 {
-    document.getElementById("RGBImage").src = "/lettucescan/rgb.png?d=" + new Date().toISOString();
-    document.getElementById("DepthImage").src = "/lettucescan/depth.png?d=" + new Date().toISOString();
+    $.get("/lettucescan/grab", function(result){
+        document.getElementById("RGBImage").src = "/lettucescan/rgb.png?d=" + new Date().toISOString();
+        document.getElementById("DepthImage").src = "/lettucescan/depth.png?d=" + new Date().toISOString();
+    });
 }
 
 function initControllerButton(svg, id, dx, dy, dz)
 {
     var b = svg.getElementById(id);
-    b.addEventListener("mouseup", function() { move(dx, dy, dz); }, false);
+    b.addEventListener("mouseup",
+                       function() {
+                           move(dx, dy, dz);
+                           grabImages(); },
+                       false);
 }
 
 function initController()
