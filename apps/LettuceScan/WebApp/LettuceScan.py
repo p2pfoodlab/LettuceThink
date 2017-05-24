@@ -29,12 +29,13 @@ import time
 #import DepthSense as DS
 #import cv2
 #import numpy as np
-#import os
+import os
 import subprocess
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 ############################################################
 # Global coordinates of the CNC and camera
@@ -168,7 +169,7 @@ def grab_images():
 #    im = DS.getVertices()
 #    np.save("%s/vert"%(imdir), im)   
 #
-    subprocess.call(['python', 'dsgrab.py'])
+    subprocess.call(['python', dir_path + '/dsgrab.py'])
     return [{"href": "static/img/rgb.png", "name": "RGB image"},
             {"href": "static/img/depth.png", "name": "Depth image"},
             {"href": "static/img/confidence.png", "name": "Confidence levels (image)"},
