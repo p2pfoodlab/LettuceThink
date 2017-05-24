@@ -174,7 +174,8 @@ def grab_images():
 #    im = DS.getVertices()
 #    np.save("%s/vert"%(imdir), im)   
 #
-    subprocess.call(['python', dir_path + '/dsgrab.py'])
+    
+    #subprocess.call(['python', dir_path + '/dsgrab.py'])
     return [{"href": "static/img/rgb.png", "name": "RGB image"},
             {"href": "static/img/depth.png", "name": "Depth image"},
             {"href": "static/img/confidence.png", "name": "Confidence levels (image)"},

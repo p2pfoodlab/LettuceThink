@@ -51,8 +51,8 @@ def grab_images():
 imdir = "static/img"
 
 ds = DS.initDepthSense()
-time.sleep(10)
+time.sleep(4)
 grab_images()
-time.sleep(2)
+time.sleep(1)
 grab_images()
 
