@@ -88,7 +88,7 @@ def cnc_send_cmd(cmd):
     return grbl_out
 
 def cnc_update_position(newx, newy, newz):
-    if False: # Doesn't work, yet
+    if False: # TODO: Doesn't work, yet
         cnc.write("$?")
         pos = cnc.readline()
         print pos

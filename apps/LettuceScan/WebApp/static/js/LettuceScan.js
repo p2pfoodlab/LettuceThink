@@ -130,7 +130,9 @@ function squareScan()
 
 function homing()
 {
-    $.get("/lettucescan/homing");
+    $.get("/lettucescan/homing", function(result){
+        set_position(result);
+    });
 }
 
 function xyChangingHandler(evt)
