@@ -166,7 +166,13 @@ def grab_images():
     
     im = DS.getVertices()
     np.save("%s/vert"%(imdir), im)   
-    return
+
+    return [{"href": "static/img/rgb.png", "name": "RGB image"},
+            {"href": "static/img/depth.png", "name": "Depth image"},
+            {"href": "static/img/confidence.png", "name": "Confidence levels (image)"},
+            {"href": "static/img/rgbd.png", "name": "Coloured depth image"},
+            {"href": "static/img/gscale.png", "name": "Grey-scale image"}]
+
 
 ############################################################
 # scanning functions
@@ -316,8 +322,8 @@ def rest_squarescan():
 
 @app.route('/grab')
 def rest_grab():
-    grab_images()
-    return
+    files = grab_images()
+    return jsonify(files)
 
 @app.route('/rgb.png')
 def rest_rgb():
