@@ -132,11 +132,9 @@ def cnc_stop():
 imdir = "static/img"
 panTilt = 0;
 
-def cnc_init(port="/dev/ttyUSB0"):
+def camera_init(port="/dev/ttyACM0"):
     global panTilt
     panTilt = serial.Serial(port, 9600)
-
-def camera_init(port="/dev/ttyACM0")
 
 def camera_homing():
     return
