@@ -26,10 +26,11 @@ from flask import send_file
 import datetime
 import serial
 import time
-import DepthSense as DS
-import cv2
-import numpy as np
-import os
+#import DepthSense as DS
+#import cv2
+#import numpy as np
+#import os
+import subprocess
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -126,7 +127,7 @@ def cnc_stop():
 ############################################################
 # camera functions
 
-ds = DS.initDepthSense()
+#ds = DS.initDepthSense()
 imdir = "static/img"
 
 def camera_homing():
@@ -143,30 +144,31 @@ def camera_moveto(newpan, newtilt):
     return
 
 def grab_images():
-    im = DS.getColourMap()
-    cv2.imwrite("%s/rgb.png"%(imdir), im)   
-    
-    im = DS.getDepthMap()
-    cv2.imwrite("%s/depth.png"%(imdir), im)   
-
-    im = DS.getConfidenceMap()
-    cv2.imwrite("%s/confidence.png"%(imdir), im)   
-    
-    im = DS.getDepthColouredMap()
-    cv2.imwrite("%s/rgbd.png"%(imdir), im)   
-    
-    im = DS.getGreyScaleMap()
-    cv2.imwrite("%s/gscale.png"%(imdir), im)   
-    
-    im = DS.getSyncMap()
-    np.save("%s/sync"%(imdir), im)   
-    
-    im = DS.getUVMap()
-    np.save("%s/uv"%(imdir), im)   
-    
-    im = DS.getVertices()
-    np.save("%s/vert"%(imdir), im)   
-
+#    im = DS.getColourMap()
+#    cv2.imwrite("%s/rgb.png"%(imdir), im)   
+#    
+#    im = DS.getDepthMap()
+#    cv2.imwrite("%s/depth.png"%(imdir), im)   
+#
+#    im = DS.getConfidenceMap()
+#    cv2.imwrite("%s/confidence.png"%(imdir), im)   
+#    
+#    im = DS.getDepthColouredMap()
+#    cv2.imwrite("%s/rgbd.png"%(imdir), im)   
+#    
+#    im = DS.getGreyScaleMap()
+#    cv2.imwrite("%s/gscale.png"%(imdir), im)   
+#    
+#    im = DS.getSyncMap()
+#    np.save("%s/sync"%(imdir), im)   
+#    
+#    im = DS.getUVMap()
+#    np.save("%s/uv"%(imdir), im)   
+#    
+#    im = DS.getVertices()
+#    np.save("%s/vert"%(imdir), im)   
+#
+    subprocess.call(['python', 'dsgrab.py'])
     return [{"href": "static/img/rgb.png", "name": "RGB image"},
             {"href": "static/img/depth.png", "name": "Depth image"},
             {"href": "static/img/confidence.png", "name": "Confidence levels (image)"},
