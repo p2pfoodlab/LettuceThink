@@ -7,8 +7,8 @@ Adafruit_StepperMotor *PanMotor = AFMS.getStepper(200, 1);
 
 Parser serialParser = Parser();
 
-int pan = 0;
-int tilt = 0;
+int currentPan = 0;
+int currentTilt = 0;
 int mode = DOUBLE; //SINGLE 1, DOUBLE 2, INTERLEAVE 3, MICROSTEP 4
 
 void setSpeed(int s)
@@ -29,20 +29,36 @@ void setup()
   PanMotor->step(0, FORWARD, mode); 
 }
 
+void setPan(int value) 
+{
+  int step10 = map(value, -1800, 1800, -2000, 2000);
+  int step = (step10 + 5) / 10;
+  int delta = (step - currentPan);
+  PanMotor->step(abs(delta), (delta > 0)? FORWARD : BACKWARD, mode);
+  currentPan = step;
+}
+
+void setTilt(int value) 
+{
+  int step10 = map(value, -1800, 1800, -2000, 2000);
+  int step = (step10 + 5) / 10;
+  int delta = (step - currentTilt);
+  TiltMotor->step(abs(delta), (delta > 0)? FORWARD : BACKWARD, mode);
+  currentTilt = step;
+}
+
 void handleCommand(Parser& p) 
 {
+  Serial.print("#Command: opcode=");
+  Serial.print(p.opcode);
+  Serial.print(", value=");
+  Serial.println(p.value);
   switch (p.opcode) {
-    Serial.print("#Command: opcode=");
-    Serial.print(p.opcode);
-    Serial.print(", value=");
-    Serial.println(p.value);
     case 'p': 
-      PanMotor->step(p.absvalue, (p.sign == 1)? FORWARD : BACKWARD, mode);
-      pan += p.value;
+      setPan(p.value);
       break; 
     case 't': 
-      TiltMotor->step(p.absvalue, (p.sign == 1)? FORWARD : BACKWARD, mode);
-      tilt += p.value;
+      setTilt(p.value);
       break;
     case 'm': 
       mode = p.value;
@@ -60,6 +76,8 @@ void loop()
     if (serialParser.handle(c) == COMMAND) {
       handleCommand(serialParser);
     }
+    delay(1);
   }
+  delay(10);
 }
 

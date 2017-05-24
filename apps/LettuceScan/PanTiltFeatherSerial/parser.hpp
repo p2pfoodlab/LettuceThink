@@ -8,8 +8,8 @@ enum _pstate {
 class Parser 
 {
   public:
-    int state;
-    int opcode;
+    char state;
+    char opcode;
     int sign;
     int value;
     int absvalue;

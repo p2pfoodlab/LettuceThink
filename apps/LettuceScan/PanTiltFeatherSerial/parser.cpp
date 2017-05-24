@@ -30,7 +30,7 @@ int Parser::handle(char c)
       } else if (state == DIGIT) {
         value = value * 10 + (c - '0');
       } else state = OPCODE; 
-    } else if (c == ';') {
+    } else if (c == ';' || c == ' ' || c == '\n' || c == '\r' || c == '\t') {
       if (state == DIGIT) {
         absvalue = value;
         value = sign * value;
