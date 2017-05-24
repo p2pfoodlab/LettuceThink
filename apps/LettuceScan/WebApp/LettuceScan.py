@@ -130,6 +130,13 @@ def cnc_stop():
 
 #ds = DS.initDepthSense()
 imdir = "static/img"
+panTilt = 0;
+
+def cnc_init(port="/dev/ttyUSB0"):
+    global panTilt
+    panTilt = serial.Serial(port, 9600)
+
+def camera_init(port="/dev/ttyACM0")
 
 def camera_homing():
     return
@@ -138,9 +145,9 @@ def camera_stop():
     return
 
 def camera_moveto(newpan, newtilt):
-    # tell camera to move to new position
-    # wait for reply 
-    # extract new position from camera's reply
+    panTilt.write("p%s t%s\n"%(int(10*newpan), int(10*newtilt)))
+    pos = panTilt.readline()
+    print pos
     set_camera_position(newpan, newtilt)
     return
 
@@ -354,6 +361,8 @@ def clamp(n, minn, maxn):
 
 def lettucescan_init(app):
     cnc_init("/dev/ttyUSB0")
+    camera_init("/dev/ttyACM0")
+
 
 lettucescan_init(app)
 
