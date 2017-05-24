@@ -22,9 +22,6 @@ import numpy as np
 import os
 import time
 
-ds = DS.initDepthSense()
-imdir = "static/img"
-
 def grab_images():
     im = DS.getColourMap()
     cv2.imwrite("%s/rgb.png"%(imdir), im)   
@@ -51,6 +48,10 @@ def grab_images():
     np.save("%s/vert"%(imdir), im)   
     return
 
+imdir = "static/img"
+
+ds = DS.initDepthSense()
+time.sleep(10)
 grab_images()
 time.sleep(2)
 grab_images()
