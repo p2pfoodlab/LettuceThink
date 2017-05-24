@@ -20,6 +20,7 @@ import DepthSense as DS
 import cv2
 import numpy as np
 import os
+import time
 
 ds = DS.initDepthSense()
 imdir = "static/img"
@@ -51,3 +52,6 @@ def grab_images():
     return
 
 grab_images()
+time.sleep(2)
+grab_images()
+
