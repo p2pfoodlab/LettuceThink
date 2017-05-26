@@ -361,7 +361,7 @@ function initApp()
         fill: '', stroke: '#c0c0c0', strokeWidth: 1,
         hasBorders: false, hasControls: false, evented: false
     });
-    ztiltTriangle.add(rect);
+    ztiltCanvas.add(rect);
     ztiltTriangle.set('angle', 90);
     ztiltCanvas.add(ztiltTriangle);
     ztiltCanvas.add(new fabric.Text('Z and Tilt', { 
