@@ -48,12 +48,12 @@ function yservertogui(y)
 
 function zguitoserver(y)
 {
-    return (130 - y) / 10;
+    return (260 - y) / 24;
 }
 
 function zservertogui(z)
 {
-    return 130 - 10 * z;
+    return 260 - 24 * z;
 }
 
 function set_position2(p)
@@ -81,6 +81,7 @@ function set_position(p)
     xypanTriangle.set('angle', 180 + position.pan);
     xypanTriangle.setCoords();
     xypanCanvas.renderAll();
+    ztiltTriangle.setLeft(25);
     ztiltTriangle.setTop(zservertogui(position.z));
     ztiltTriangle.set('angle', 90 + position.tilt);
     ztiltTriangle.setCoords();
@@ -354,6 +355,13 @@ function initApp()
         br: false,
         bl: false
     });
+    var rect = new fabric.Rect({
+        left: 20, top: 20,
+        width: 10, height: 240,
+        fill: '', stroke: '#c0c0c0', strokeWidth: 1,
+        hasBorders: false, hasControls: false, evented: false
+    });
+    ztiltTriangle.add(rect);
     ztiltTriangle.set('angle', 90);
     ztiltCanvas.add(ztiltTriangle);
     ztiltCanvas.add(new fabric.Text('Z and Tilt', { 
