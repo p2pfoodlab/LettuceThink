@@ -26,6 +26,36 @@ var xypanTriangle;
 var ztiltCanvas;
 var ztiltTriangle;
 
+function xguitoserver(x)
+{
+    return 80 - (x - 20) / 2;
+}
+
+function yguitoserver(y)
+{
+    return 80 - (y - 20) / 2;
+}
+
+function zguitoserver(y)
+{
+    return (130 - y) / 10;
+}
+
+function xservertogui(x)
+{
+    return 20 + 160 - 2 * x;
+}
+
+function yservertogui(y)
+{
+    return 20 + 160 - 2 * y;
+}
+
+function zservertogui(z)
+{
+    return 130 - 10 * z;
+}
+
 function set_position2(p)
 {
     position = p;
@@ -45,12 +75,12 @@ function set_position(p)
     document.getElementById("pan").value = position.pan;
     document.getElementById("tilt").value = position.tilt;
 
-    xypanTriangle.setLeft(160 - 2 * position.x);
-    xypanTriangle.setTop(160 - 2 * position.y);
+    xypanTriangle.setLeft(xservertogui(position.x));
+    xypanTriangle.setTop(yservertogui(position.y));
     xypanTriangle.set('angle', 180 + position.pan);
     xypanTriangle.setCoords();
     xypanCanvas.renderAll();
-    ztiltTriangle.setTop(130 - 10 * position.z);
+    ztiltTriangle.setTop(zguitoserver(position.z));
     ztiltTriangle.set('angle', 90 + position.tilt);
     ztiltTriangle.setCoords();
     ztiltCanvas.renderAll();
@@ -139,8 +169,8 @@ function xyChangingHandler(evt)
 {
     var movingObject = evt.target;
     var pt = movingObject.getCenterPoint();
-    set_position2({'x': 80 - pt.x / 2,
-                   'y': 80 - pt.y / 2,
+    set_position2({'x': xguitoserver(pt.x),
+                   'y': yguitoserver(pt.y),
                    'z': position.z,
                    'pan': position.pan,
                    'tilt': position.tilt });
@@ -160,8 +190,8 @@ function xypanChangedHandler(evt)
 {
     var movingObject = evt.target;
     var pt = movingObject.getCenterPoint();
-    set_position2({'x': 80 - pt.x / 2,
-                  'y': 80 - pt.y / 2,
+    set_position2({'x': xguitoserver(pt.x),
+                   'y': yguitoserver(pt.y),
                    'z': position.z,
                    'pan': movingObject.get('angle') - 180,
                    'tilt': position.tilt });
@@ -175,7 +205,7 @@ function zChangingHandler(evt)
     var pt = movingObject.getCenterPoint();
     set_position2({'x': position.x,
                    'y': position.y,
-                   'z': (130 - pt.y) / 10,
+                   'z': zguitoserver(pt.y),
                    'pan': position.pan,
                    'tilt': position.tilt });
 };
@@ -196,7 +226,7 @@ function ztiltChangedHandler(evt)
     var pt = movingObject.getCenterPoint();
     set_position2({'x': position.x,
                    'y': position.y,
-                   'z': (130 - pt.y) / 10,
+                   'z': zguitoserver(pt.y),
                    'pan': position.pan,
                    'tilt': movingObject.get('angle') - 90 });
     moveTo();
