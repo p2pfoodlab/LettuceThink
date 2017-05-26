@@ -48,12 +48,12 @@ function yservertogui(y)
 
 function zguitoserver(y)
 {
-    return (260 - y) / 24;
+    return (220 - y) / 16;
 }
 
 function zservertogui(z)
 {
-    return 260 - 24 * z;
+    return 220 - 16 * z;
 }
 
 function set_position2(p)
@@ -356,7 +356,7 @@ function initApp()
         bl: false
     });
     var rect = new fabric.Rect({
-        left: 20, top: 20,
+        left: 15, top: 20,
         width: 10, height: 240,
         fill: '', stroke: '#c0c0c0', strokeWidth: 1,
         hasBorders: false, hasControls: false, evented: false
