@@ -26,8 +26,8 @@ from flask import send_file
 import datetime
 import serial
 import time
-#import DepthSense as DS
-#import cv2
+import DepthSense as DS
+import cv2
 #import numpy as np
 import os
 import subprocess
@@ -128,15 +128,17 @@ def cnc_stop():
 ############################################################
 # camera functions
 
-#ds = DS.initDepthSense()
+ds = DS.initDepthSense()
 imdir = "static/img"
 panTilt = 0;
 
 def camera_init(port="/dev/ttyACM0"):
     global panTilt
     panTilt = serial.Serial(port, 9600)
+    return
 
 def camera_homing():
+    camera_moveto(0, 0)
     return
 
 def camera_stop():
@@ -150,11 +152,10 @@ def camera_moveto(newpan, newtilt):
     return
 
 def grab_images():
-#    im = DS.getColourMap()
-#    cv2.imwrite("%s/rgb.png"%(imdir), im)   
-#    
-#    im = DS.getDepthMap()
-#    cv2.imwrite("%s/depth.png"%(imdir), im)   
+    im = DS.getColourMap()
+    cv2.imwrite("%s/rgb.png"%(imdir), im)       
+    im = DS.getDepthMap()
+    cv2.imwrite("%s/depth.png"%(imdir), im)   
 #
 #    im = DS.getConfidenceMap()
 #    cv2.imwrite("%s/confidence.png"%(imdir), im)   
@@ -173,14 +174,15 @@ def grab_images():
 #    
 #    im = DS.getVertices()
 #    np.save("%s/vert"%(imdir), im)   
-#
-    
+#    
     #subprocess.call(['python', dir_path + '/dsgrab.py'])
-    return [{"href": "static/img/rgb.png", "name": "RGB image"},
-            {"href": "static/img/depth.png", "name": "Depth image"},
+    """
             {"href": "static/img/confidence.png", "name": "Confidence levels (image)"},
             {"href": "static/img/rgbd.png", "name": "Coloured depth image"},
-            {"href": "static/img/gscale.png", "name": "Grey-scale image"}]
+            {"href": "static/img/gscale.png", "name": "Grey-scale image"}
+    """
+    return [{"href": "static/img/rgb.png", "name": "RGB image"},
+            {"href": "static/img/depth.png", "name": "Depth image"}]
 
 
 ############################################################
@@ -203,10 +205,12 @@ def get_file_list():
 # REST API
 
 @app.route('/')
+@app.route('/lettucescan')
 def index():
     return redirect("/static/index.html")
 
 @app.route('/moveto', methods=['POST'])
+@app.route('/lettucescan/moveto', methods=['POST'])
 def rest_moveto():
     newx = clamp(float(request.form['x']), 0.0, 80.0)
     newy = clamp(float(request.form['y']), 0.0, 80.0)
@@ -218,6 +222,7 @@ def rest_moveto():
     return jsonify(get_position())
 
 @app.route('/move', methods=['POST'])
+@app.route('/lettucescan/move', methods=['POST'])
 def rest_move():
     dx = 0.0
     dy = 0.0
@@ -236,20 +241,25 @@ def rest_move():
     return jsonify(get_position())
 
 @app.route('/position')
+@app.route('/lettucescan/position')
 def rest_position():
     return jsonify(get_position())
 
 @app.route('/homing')
+@app.route('/lettucescan/homing')
 def rest_homing():
     cnc_homing()
+    camera_homing()
     return jsonify(get_position())
 
 @app.route('/stop')
+@app.route('/lettucescan/stop')
 def rest_stop():
     # TODO
     return jsonify(get_position())
 
 @app.route('/circularscan', methods=['POST'])
+@app.route('/lettucescan/circularscan', methods=['POST'])
 def rest_circularscan():
     xc = 0.0
     yc = 0.0
@@ -290,6 +300,7 @@ def rest_circularscan():
     return jsonify(result)
 
 @app.route('/squarescan', methods=['POST'])
+@app.route('/lettucescan/squarescan', methods=['POST'])
 def rest_squarescan():
     xs = 0.0
     ys = 0.0
@@ -330,15 +341,18 @@ def rest_squarescan():
     return jsonify(result)
 
 @app.route('/grab')
+@app.route('/lettucescan/grab')
 def rest_grab():
     files = grab_images()
     return jsonify(files)
 
 @app.route('/rgb.png')
+@app.route('/lettucescan/rgb.png')
 def rest_rgb():
     return send_file("static/img/rgb.png", mimetype='image/png')
 
 @app.route('/depth.png')
+@app.route('/lettucescan/depth.png')
 def rest_depth():
     return send_file("static/img/depth.png", mimetype='image/png')
 

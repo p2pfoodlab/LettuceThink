@@ -268,7 +268,7 @@ function initApp()
     xypanCanvas = new fabric.Canvas('XYPanView');
     xypanTriangle = new fabric.Triangle({
     width: 16, height: 32, fill: 'blue',
-        left: 80, top: 80,
+        left: 20 + 80, top: 20 + 80,
         originX: "center",
         originY: "center",
         hasBorders: true,
@@ -285,6 +285,14 @@ function initApp()
         br: false,
         bl: false
     });
+    var rect = new fabric.Rect({
+        left: 20, top: 20,
+        width: 80, height: 80,
+        fill: '', stroke: 'grey', strokeWidth: 1,
+        hasBorders: false, hasControls: false, evented: false
+    });
+    xypanCanvas.add(rect);
+    
     xypanCanvas.add(xypanTriangle);
     xypanCanvas.add(new fabric.Text('XY and Pan', { 
         left: 4, top: 4, hasControls: false, hasBorders: false, evented: false, fontSize: 12
