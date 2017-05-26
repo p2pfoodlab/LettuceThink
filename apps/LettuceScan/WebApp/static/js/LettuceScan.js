@@ -28,27 +28,27 @@ var ztiltTriangle;
 
 function xguitoserver(x)
 {
-    return 80 - (x - 20) / 2;
+    return 80 - (x - 40) / 2;
+}
+
+function xservertogui(x)
+{
+    return 40 + 160 - 2 * x;
 }
 
 function yguitoserver(y)
 {
-    return 80 - (y - 20) / 2;
+    return 80 - (y - 40) / 2;
+}
+
+function yservertogui(y)
+{
+    return 40 + 160 - 2 * y;
 }
 
 function zguitoserver(y)
 {
     return (130 - y) / 10;
-}
-
-function xservertogui(x)
-{
-    return 20 + 160 - 2 * x;
-}
-
-function yservertogui(y)
-{
-    return 20 + 160 - 2 * y;
 }
 
 function zservertogui(z)
@@ -316,8 +316,8 @@ function initApp()
         bl: false
     });
     var rect = new fabric.Rect({
-        left: 20, top: 20,
-        width: 80, height: 80,
+        left: 40, top: 40,
+        width: 160, height: 160,
         fill: '', stroke: 'grey', strokeWidth: 1,
         hasBorders: false, hasControls: false, evented: false
     });
