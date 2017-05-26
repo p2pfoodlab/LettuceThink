@@ -81,7 +81,7 @@ function set_position(p)
     xypanTriangle.set('angle', 180 + position.pan);
     xypanTriangle.setCoords();
     xypanCanvas.renderAll();
-    ztiltTriangle.setTop(zguitoserver(position.z));
+    ztiltTriangle.setTop(zservertogui(position.z));
     ztiltTriangle.set('angle', 90 + position.tilt);
     ztiltTriangle.setCoords();
     ztiltCanvas.renderAll();
