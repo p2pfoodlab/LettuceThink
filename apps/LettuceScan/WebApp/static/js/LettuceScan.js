@@ -68,6 +68,7 @@ function set_position2(p)
 
 function set_position(p)
 {
+    console.log("set_position", JSON.stringify(p));
     position = p;
     document.getElementById("x").value = position.x;
     document.getElementById("y").value = position.y;
@@ -112,6 +113,7 @@ function moveTo() {
                   z: parseFloat(document.getElementById("z").value),
                   pan: parseFloat(document.getElementById("pan").value),
                   tilt: parseFloat(document.getElementById("tilt").value) };
+    console.log("moveto", JSON.stringify(coord));
     $.post("/lettucescan/moveto", coord, function(result){
         set_position(result);
     });
@@ -119,6 +121,7 @@ function moveTo() {
 
 function move(dx, dy, dz) {
     var coord = { "dx": dx, "dy": dy, "dz": dz }
+    console.log("move", JSON.stringify(coord));
     $.post("/lettucescan/move", coord, function(result){
         set_position(result);
     });
