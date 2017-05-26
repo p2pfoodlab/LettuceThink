@@ -318,7 +318,7 @@ function initApp()
     var rect = new fabric.Rect({
         left: 60, top: 60,
         width: 160, height: 160,
-        fill: '', stroke: 'blue', strokeWidth: 1,
+        fill: '', stroke: '#c0c0c0', strokeWidth: 1,
         hasBorders: false, hasControls: false, evented: false
     });
     xypanCanvas.add(rect);
