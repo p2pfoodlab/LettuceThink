@@ -356,8 +356,8 @@ function initApp()
         bl: false
     });
     var rect = new fabric.Rect({
-        left: 15, top: 20,
-        width: 10, height: 240,
+        left: 15, top: 60,
+        width: 10, height: 160,
         fill: '', stroke: '#c0c0c0', strokeWidth: 1,
         hasBorders: false, hasControls: false, evented: false
     });
