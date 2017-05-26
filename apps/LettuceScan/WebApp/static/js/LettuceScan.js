@@ -28,22 +28,22 @@ var ztiltTriangle;
 
 function xguitoserver(x)
 {
-    return 80 - (x - 40) / 2;
+    return 80 - (x - 60) / 2;
 }
 
 function xservertogui(x)
 {
-    return 40 + 160 - 2 * x;
+    return 60 + 160 - 2 * x;
 }
 
 function yguitoserver(y)
 {
-    return 80 - (y - 40) / 2;
+    return 80 - (y - 60) / 2;
 }
 
 function yservertogui(y)
 {
-    return 40 + 160 - 2 * y;
+    return 60 + 160 - 2 * y;
 }
 
 function zguitoserver(y)
