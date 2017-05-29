@@ -207,7 +207,7 @@ function xypanChangedHandler(evt)
     set_position2({'x': xguitoserver(pt.x),
                    'y': yguitoserver(pt.y),
                    'z': position.z,
-                   'pan': movingObject.get('angle') - 180,
+                   'pan': panguitoserver(movingObject.get('angle')),
                    'tilt': position.tilt });
     moveTo();
     grabImages();
