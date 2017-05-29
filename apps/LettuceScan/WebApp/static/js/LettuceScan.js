@@ -56,6 +56,16 @@ function zservertogui(z)
     return 220 - 16 * z;
 }
 
+function panguitoserver(v)
+{
+    return 180 - v;
+}
+
+function panservertogui(v)
+{
+    return 180 - v;
+}
+
 function set_position2(p)
 {
     position = p;
@@ -78,7 +88,7 @@ function set_position(p)
 
     xypanTriangle.setLeft(xservertogui(position.x));
     xypanTriangle.setTop(yservertogui(position.y));
-    xypanTriangle.set('angle', 180 + position.pan);
+    xypanTriangle.set('angle', panservertogui(position.pan));
     xypanTriangle.setCoords();
     xypanCanvas.renderAll();
     ztiltTriangle.setLeft(25);
@@ -186,7 +196,7 @@ function panChangingHandler(evt)
     set_position2({'x': position.x,
                    'y': position.y,
                    'z': position.z,
-                   'pan': movingObject.get('angle') - 180,
+                   'pan': panguitoserver(movingObject.get('angle')),
                    'tilt': position.tilt });
 }
 
