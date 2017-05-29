@@ -200,7 +200,6 @@ def circular_coordinates(cx, cy, cz, R, N):
    return x, y, pan
 
 def circularscan(xc, yc, zc, r, nc):
-    # TODO
     x, y, pan = circular_coordinates(cx, cy, cz, r, nc)
     print "x:", x
     print "y:", y
@@ -276,6 +275,7 @@ def rest_stop():
 @app.route('/circularscan', methods=['POST'])
 @app.route('/lettucescan/circularscan', methods=['POST'])
 def rest_circularscan():
+    print "rest_circularscan"
     xc = 0.0
     yc = 0.0
     zc = 0.0
@@ -307,6 +307,8 @@ def rest_circularscan():
         or (zc < 0) or (zc > 10)
         or (nc < 1) or (nc > 360)):
         return error_message("invalid parameters");
+    print "xc: ", xc
+    print "yc: ", yc
     circularscan(xc, yc, zc, r, nc)
     files = get_file_list()
     result = { "error": False,
