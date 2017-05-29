@@ -28,7 +28,7 @@ import serial
 import time
 import DepthSense as DS
 import cv2
-#import numpy as np
+import numpy as numpy
 import os
 import subprocess
 
@@ -188,8 +188,23 @@ def grab_images():
 ############################################################
 # scanning functions
 
+def circular_coordinates(cx, cy, cz, R, N):
+   alpha = numpy.linspace(0, 2 * numpy.pi, N)
+   x = []
+   y = []
+   pan = []
+   for i in range(0, N):
+      x.append(cx - R * math.cos(alpha[i])
+      y.append(cy - R * math.sin(alpha[i])
+      pan.append(alpha[i])
+   return x, y, pan
+
 def circularscan(xc, yc, zc, r, nc):
     # TODO
+    x, y, pan = circular_coordinates(cx, cy, cz, r, nc)
+    print "x:", x
+    print "y:", y
+    print "pan:", pan
     return
 
 def squarescan(xs, ys, zs, d, ns):
