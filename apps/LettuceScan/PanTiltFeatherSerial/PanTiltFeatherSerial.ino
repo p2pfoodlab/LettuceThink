@@ -101,7 +101,7 @@ void setPan(int value)
   pan.moveTo(step);
 }
 
-void getPan()
+int getPan()
 {
   return map(pan.currentPosition(), -FULLSTEPS_PER_TURN, FULLSTEPS_PER_TURN, -1800, 1800);
 }
@@ -113,7 +113,7 @@ void setTilt(int value)
   tilt.moveTo(step);
 }
 
-void getTilt()
+int getTilt()
 {
    return map(tilt.currentPosition(), -FULLSTEPS_PER_TURN, FULLSTEPS_PER_TURN, -1800, 1800);
 }
