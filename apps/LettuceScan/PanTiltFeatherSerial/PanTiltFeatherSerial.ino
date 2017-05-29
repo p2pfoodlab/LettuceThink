@@ -42,7 +42,7 @@ void setPan(int value)
   currentPan = step;
 }
 
-void getPan()
+int getPan()
 {
   return map(currentPan, -200, 200, -1800, 1800);
 }
@@ -56,7 +56,7 @@ void setTilt(int value)
   currentTilt = step;
 }
 
-void getTilt()
+int getTilt()
 {
   return map(currentTilt, -200, 200, -1800, 1800);
 }
