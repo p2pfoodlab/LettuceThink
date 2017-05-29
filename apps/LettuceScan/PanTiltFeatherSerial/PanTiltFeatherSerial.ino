@@ -73,7 +73,7 @@ void updateSteppers()
 #define FULLSTEPS_PER_TURN_10  2000
 int mode = 2; // 1=fullstep, 2=half-step, 4=1/4-step, 8=1/8-step
 AccelStepper pan(AccelStepper::DRIVER, 5, 6);
-AccelStepper tilt(AccelStepper::DRIVER, 5, 6);
+AccelStepper tilt(AccelStepper::DRIVER, 9, 10);
 
 void initSteppers()
 {
