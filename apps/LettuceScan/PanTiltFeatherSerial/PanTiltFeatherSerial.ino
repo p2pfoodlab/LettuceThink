@@ -1,15 +1,26 @@
-#include <Adafruit_MotorShield.h>
 #include "parser.hpp"
 
+#define USE_AFMS 0
+
+/******************* Adafruit Motorshield **********************/
+#if USE_AFMS
+#include <Adafruit_MotorShield.h>
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_StepperMotor *TiltMotor = AFMS.getStepper(200, 2);
 Adafruit_StepperMotor *PanMotor = AFMS.getStepper(200, 1);
 
-Parser serialParser = Parser();
-
 int currentPan = 0;
 int currentTilt = 0;
 int mode = DOUBLE; //SINGLE 1, DOUBLE 2, INTERLEAVE 3, MICROSTEP 4
+
+void initSteppers()
+{
+  AFMS.begin();
+  TiltMotor->setSpeed(50);    
+  PanMotor->setSpeed(50);   
+  TiltMotor->step(0, FORWARD, mode);
+  PanMotor->step(0, FORWARD, mode); 
+}
 
 void setSpeed(int s)
 {
@@ -17,25 +28,23 @@ void setSpeed(int s)
   PanMotor->setSpeed(s);  
 }
 
-void setup() 
+void setMode(int value)
 {
-  Serial.begin(9600);             
-  AFMS.begin();
- 
-  TiltMotor->setSpeed(50);    
-  PanMotor->setSpeed(50);  
- 
-  TiltMotor->step(0, FORWARD, mode);
-  PanMotor->step(0, FORWARD, mode); 
+  mode = value;
 }
 
-void setPan(int value) 
+void setPan(int value)
 {
   int step10 = map(value, -1800, 1800, -2000, 2000);
   int step = (step10 + 5) / 10;
   int delta = (step - currentPan);
   PanMotor->step(abs(delta), (delta > 0)? FORWARD : BACKWARD, mode);
   currentPan = step;
+}
+
+void getPan()
+{
+  return map(currentPan, -200, 200, -1800, 1800);
 }
 
 void setTilt(int value) 
@@ -47,12 +56,89 @@ void setTilt(int value)
   currentTilt = step;
 }
 
+void getTilt()
+{
+  return map(currentTilt, -200, 200, -1800, 1800);
+}
+
+void updateSteppers()
+{
+}
+
+/*************** AccelStepper ********************/
+#else 
+
+#include <AccelStepper.h>
+#define FULLSTEPS_PER_TURN  200
+#define FULLSTEPS_PER_TURN_10  2000
+int mode = 2; // 1=fullstep, 2=half-step, 4=1/4-step, 8=1/8-step
+AccelStepper pan(AccelStepper::DRIVER, 5, 6);
+AccelStepper tilt(AccelStepper::DRIVER, 5, 6);
+
+void initSteppers()
+{
+  pan.setMaxSpeed(1000);
+  pan.setAcceleration(200);
+  tilt.setMaxSpeed(1000);
+  tilt.setAcceleration(200);
+}
+
+void setSpeed(int s)
+{
+  pan.setMaxSpeed(1000);
+  tilt.setMaxSpeed(1000);
+}
+
+void setMode(int value)
+{
+   mode = value;
+}
+
+void setPan(int value)
+{
+  int step10 = map(value, -1800, 1800, -FULLSTEPS_PER_TURN_10, FULLSTEPS_PER_TURN_10);
+  int step = (step10 + 5) / 10;
+  pan.moveTo(step);
+}
+
+void getPan()
+{
+  return map(pan.currentPosition(), -FULLSTEPS_PER_TURN, FULLSTEPS_PER_TURN, -1800, 1800);
+}
+
+void setTilt(int value) 
+{
+  int step10 = map(value, -1800, 1800, -FULLSTEPS_PER_TURN_10, FULLSTEPS_PER_TURN_10);
+  int step = (step10 + 5) / 10;
+  tilt.moveTo(step);
+}
+
+void getTilt()
+{
+   return map(tilt.currentPosition(), -FULLSTEPS_PER_TURN, FULLSTEPS_PER_TURN, -1800, 1800);
+}
+
+void updateSteppers()
+{
+  pan.run();
+  tilt.run();
+}
+
+#endif
+
+
+/********************************************************/
+
+Parser serialParser = Parser();
+
+void setup() 
+{
+  Serial.begin(9600);             
+  initSteppers();
+}
+
 void handleCommand(Parser& p) 
 {
-  Serial.print("#Command: opcode=");
-  Serial.print(p.opcode);
-  Serial.print(", value=");
-  Serial.println(p.value);
   switch (p.opcode) {
     case 'p': 
       setPan(p.value);
@@ -61,12 +147,15 @@ void handleCommand(Parser& p)
       setTilt(p.value);
       break;
     case 'm': 
-      mode = p.value;
+      setMode(p.value);
       break;
     case 's': 
       setSpeed(p.value);
       break;
   }
+  Serial.print(getPan());
+  Serial.print(",");
+  Serial.println(getTilt());
 }
 
 void loop()
@@ -78,6 +167,6 @@ void loop()
     }
     delay(1);
   }
-  delay(10);
+  updateSteppers();
 }
 
