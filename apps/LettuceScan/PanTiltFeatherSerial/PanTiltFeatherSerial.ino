@@ -72,8 +72,8 @@ void updateSteppers()
 #define FULLSTEPS_PER_TURN  200
 #define FULLSTEPS_PER_TURN_10  2000
 int mode = 2; // 1=fullstep, 2=half-step, 4=1/4-step, 8=1/8-step
-AccelStepper pan(AccelStepper::DRIVER, 5, 6);
-AccelStepper tilt(AccelStepper::DRIVER, 9, 10);
+AccelStepper pan(AccelStepper::DRIVER, 9, 10);
+AccelStepper tilt(AccelStepper::DRIVER, 5, 6);
 
 void initSteppers()
 {
@@ -85,8 +85,9 @@ void initSteppers()
 
 void setSpeed(int s)
 {
-  pan.setMaxSpeed(1000);
-  tilt.setMaxSpeed(1000);
+  // TODO: should set speed seperately for pan and tilt
+  pan.setMaxSpeed(s);
+  tilt.setMaxSpeed(s);
 }
 
 void setMode(int value)
