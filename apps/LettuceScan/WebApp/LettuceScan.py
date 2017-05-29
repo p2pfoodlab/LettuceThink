@@ -194,8 +194,8 @@ def circular_coordinates(cx, cy, cz, R, N):
    y = []
    pan = []
    for i in range(0, N):
-      x.append(cx - R * math.cos(alpha[i])
-      y.append(cy - R * math.sin(alpha[i])
+      x.append(cx - R * math.cos(alpha[i]))
+      y.append(cy - R * math.sin(alpha[i]))
       pan.append(alpha[i])
    return x, y, pan
 
