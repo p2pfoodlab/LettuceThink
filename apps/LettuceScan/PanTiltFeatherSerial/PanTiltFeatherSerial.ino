@@ -97,26 +97,26 @@ void setMode(int value)
 
 void setPan(int value)
 {
-  int step10 = map(value, -1800, 1800, -FULLSTEPS_PER_TURN_10, FULLSTEPS_PER_TURN_10);
+  int step10 = map(value, -1800, 1800, -FULLSTEPS_PER_TURN_10 * mode, FULLSTEPS_PER_TURN_10 * mode);
   int step = (step10 + 5) / 10;
   pan.moveTo(step);
 }
 
 int getPan()
 {
-  return map(pan.currentPosition(), -FULLSTEPS_PER_TURN, FULLSTEPS_PER_TURN, -1800, 1800);
+  return map(pan.currentPosition(), -FULLSTEPS_PER_TURN * mode, FULLSTEPS_PER_TURN * mode, -1800, 1800);
 }
 
 void setTilt(int value) 
 {
-  int step10 = map(value, -1800, 1800, -FULLSTEPS_PER_TURN_10, FULLSTEPS_PER_TURN_10);
+  int step10 = map(value, -1800, 1800, -FULLSTEPS_PER_TURN_10 * mode, FULLSTEPS_PER_TURN_10 * mode);
   int step = (step10 + 5) / 10;
   tilt.moveTo(step);
 }
 
 int getTilt()
 {
-   return map(tilt.currentPosition(), -FULLSTEPS_PER_TURN, FULLSTEPS_PER_TURN, -1800, 1800);
+   return map(tilt.currentPosition(), -FULLSTEPS_PER_TURN * mode, FULLSTEPS_PER_TURN * mode, -1800, 1800);
 }
 
 void updateSteppers()
