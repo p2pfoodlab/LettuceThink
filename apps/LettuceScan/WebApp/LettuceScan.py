@@ -30,7 +30,9 @@ import DepthSense as DS
 import cv2
 import numpy as numpy
 import os
+import math
 import subprocess
+import zipfile
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -151,11 +153,11 @@ def camera_moveto(newpan, newtilt):
     set_camera_position(newpan, newtilt)
     return
 
-def grab_images():
+def grab_images(rgbfile, depthfile):
     im = DS.getColourMap()
-    cv2.imwrite("%s/rgb.png"%(imdir), im)       
+    cv2.imwrite(rgbfile, im)       
     im = DS.getDepthMap()
-    cv2.imwrite("%s/depth.png"%(imdir), im)   
+    cv2.imwrite(depthfile, im)   
 #
 #    im = DS.getConfidenceMap()
 #    cv2.imwrite("%s/confidence.png"%(imdir), im)   
@@ -187,33 +189,54 @@ def grab_images():
 
 ############################################################
 # scanning functions
+        
+def scanAt(x, y, z, pan, tilt, i, files):
+    cnc_moveto(x, y, z)
+    camera_moveto(pan, tilt)
+    time.sleep(10)
+    rgb = "rgb-%03d.png"%(i)
+    depth = "depth-%03d.png"%(i)
+    grab_images("static/scan/" + rgb,
+                "static/scan/" + depth)
+    files.append({"href": "scan/" + rgb,
+                  "name": rgb})
+    files.append({"href": "scan/" + depth,
+                  "name": depth})
+    return
 
-def circular_coordinates(cx, cy, cz, R, N):
-   alpha = numpy.linspace(0, 2 * numpy.pi, N)
-   x = []
-   y = []
-   pan = []
+def createArchive(files):
+    zf = zipfile.ZipFile('static/scan/all.zip', mode = 'w')
+    try:
+        for f in files:
+            print "adding", "static/scan/" + f["name"]
+            zf.write("static/scan/" + f["name"])
+    finally:
+        zf.close()
+        return {"href": "scan/all.zip", "name": "all.zip"}
+
+def circular_coordinates(cx, cy, R, N):
+   alpha = numpy.linspace(0, 2 * numpy.pi, N + 1)
+   pan = numpy.linspace(0, -360.0, N + 1)
+   x, y = [], []
    for i in range(0, N):
-      x.append(cx - R * math.cos(alpha[i]))
-      y.append(cy - R * math.sin(alpha[i]))
-      pan.append(alpha[i])
+      x.append(cx + R * math.sin(alpha[i]))
+      y.append(cy - R * math.cos(alpha[i]))
    return x, y, pan
 
 def circularscan(xc, yc, zc, r, nc):
-    x, y, pan = circular_coordinates(cx, cy, cz, r, nc)
-    print "x:", x
-    print "y:", y
-    print "pan:", pan
-    return
+    pos = get_position()
+    tilt = pos['tilt']
+    files = []    
+    x, y, pan = circular_coordinates(xc, yc, r, nc)
+    for i in range(0, nc):
+        scanAt(x[i], y[i], zc, pan[i], tilt, i, files)
+    cnc_moveto(x[0], y[0], zc)
+    camera_moveto(0, tilt)
+    files.append(createArchive(files))
+    return files
 
 def squarescan(xs, ys, zs, d, ns):
-    # TODO
-    return
-
-# Returns the list of files of the most recent scan
-def get_file_list():
-    return [{"href": "static/scan/file1", "name": "file1"},
-            {"href": "static/scan/file2", "name": "file2"}]
+    return []
 
 ############################################################
 # REST API
@@ -309,8 +332,7 @@ def rest_circularscan():
         return error_message("invalid parameters");
     print "xc: ", xc
     print "yc: ", yc
-    circularscan(xc, yc, zc, r, nc)
-    files = get_file_list()
+    files = circularscan(xc, yc, zc, r, nc)
     result = { "error": False,
                "files": files,
                "position": get_position() }
@@ -350,8 +372,7 @@ def rest_squarescan():
         or (zs < 0) or (zs > 10)
         or (ns < 1) or (ns > 30)):
         return error_message("invalid parameters");
-    squarescan(xs, ys, zs, d, ns)
-    files = get_file_list()
+    files = squarescan(xs, ys, zs, d, ns)
     result = { "error": False,
                "files": files,
                "position": get_position() }
@@ -360,7 +381,8 @@ def rest_squarescan():
 @app.route('/grab')
 @app.route('/lettucescan/grab')
 def rest_grab():
-    files = grab_images()
+    files = grab_images("%s/rgb.png"%(imdir),
+                        "%s/depth.png"%(imdir))
     return jsonify(files)
 
 @app.route('/rgb.png')
