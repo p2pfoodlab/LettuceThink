@@ -77,9 +77,9 @@ AccelStepper tilt(AccelStepper::DRIVER, 9, 10);
 
 void initSteppers()
 {
-  pan.setMaxSpeed(1000);
+  pan.setMaxSpeed(200);
   pan.setAcceleration(200);
-  tilt.setMaxSpeed(1000);
+  tilt.setMaxSpeed(500);
   tilt.setAcceleration(200);
 }
 
