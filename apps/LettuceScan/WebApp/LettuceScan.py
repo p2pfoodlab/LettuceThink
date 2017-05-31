@@ -233,9 +233,11 @@ def circularscan(xc, yc, zc, r, nc):
     tilt = pos['tilt']
     files = []    
     x, y, pan = circular_coordinates(xc, yc, r, nc)
+    swivel = 0;
     for i in range(0, nc):
-        print i
-        scanAt(x[i], y[i], zc, pan[i], tilt, i, files)
+        if pan[i] > 180.0:
+            swivel = 360.0
+        scanAt(x[i], y[i], zc, pan[i] - swivel, tilt, i, files)
     cnc_moveto(x[0], y[0], zc)
     camera_moveto(0, tilt)
     files.append(createArchive(files))
