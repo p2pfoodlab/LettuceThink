@@ -198,7 +198,7 @@ def grab_images(imdir, i):
 def scanAt(x, y, z, pan, tilt, i, files):
     cnc_moveto(x, y, z)
     camera_moveto(pan, tilt)
-    time.sleep(10)
+    time.sleep(5)
     ims=["rgb", "depth", "confidence", "rgbd", "gscale"]
     np_arrays=["sync", "uv", "vert"]
 
@@ -235,9 +235,9 @@ def circularscan(xc, yc, zc, r, nc):
     x, y, pan = circular_coordinates(xc, yc, r, nc)
     swivel = 0;
     for i in range(0, nc):
-        if pan[i] > 180.0:
+        if pan[i] < -180.0:
             swivel = 360.0
-        scanAt(x[i], y[i], zc, pan[i] - swivel, tilt, i, files)
+        scanAt(x[i], y[i], zc, pan[i] + swivel, tilt, i, files)
     cnc_moveto(x[0], y[0], zc)
     camera_moveto(0, tilt)
     files.append(createArchive(files))
