@@ -28,7 +28,7 @@ import serial
 import time
 import DepthSense as DS
 import cv2
-import numpy as numpy
+import numpy as np
 import os
 import math
 import subprocess
@@ -153,38 +153,43 @@ def camera_moveto(newpan, newtilt):
     set_camera_position(newpan, newtilt)
     return
 
-def grab_images(rgbfile, depthfile):
+def grab_images(imdir, i):
     im = DS.getColourMap()
-    cv2.imwrite(rgbfile, im)       
+    cv2.imwrite("%s/rgb-%03d.png"%(imdir,i), im)       
+
     im = DS.getDepthMap()
-    cv2.imwrite(depthfile, im)   
-#
-#    im = DS.getConfidenceMap()
-#    cv2.imwrite("%s/confidence.png"%(imdir), im)   
-#    
-#    im = DS.getDepthColouredMap()
-#    cv2.imwrite("%s/rgbd.png"%(imdir), im)   
-#    
-#    im = DS.getGreyScaleMap()
-#    cv2.imwrite("%s/gscale.png"%(imdir), im)   
-#    
-#    im = DS.getSyncMap()
-#    np.save("%s/sync"%(imdir), im)   
-#    
-#    im = DS.getUVMap()
-#    np.save("%s/uv"%(imdir), im)   
-#    
-#    im = DS.getVertices()
-#    np.save("%s/vert"%(imdir), im)   
-#    
+    cv2.imwrite("%s/depth-%03d.png"%(imdir,i), im)   
+
+    im = DS.getConfidenceMap()
+    cv2.imwrite("%s/confidence-%03d.png"%(imdir,i), im)   
+     
+    im = DS.getDepthColouredMap()
+    cv2.imwrite("%s/rgbd-%03d.png"%(imdir,i), im)   
+  
+    im = DS.getGreyScaleMap()
+    cv2.imwrite("%s/gscale-%03d.png"%(imdir,i), im)   
+    
+    im = DS.getSyncMap()
+    print im.shape
+    np.save("%s/sync-%03d"%(imdir,i), im)   
+    
+    im = DS.getUVMap()
+    np.save("%s/uv-%03d"%(imdir,i), im)   
+
+    im = DS.getVertices()
+    np.save("%s/vert-%03d"%(imdir,i), im)   
+    
     #subprocess.call(['python', dir_path + '/dsgrab.py'])
     """
             {"href": "static/img/confidence.png", "name": "Confidence levels (image)"},
             {"href": "static/img/rgbd.png", "name": "Coloured depth image"},
             {"href": "static/img/gscale.png", "name": "Grey-scale image"}
     """
-    return [{"href": "static/img/rgb.png", "name": "RGB image"},
-            {"href": "static/img/depth.png", "name": "Depth image"}]
+    return [{"href": imdir+"/rgb-%03d.png"%i, "name": "RGB image"},
+            {"href": imdir+"/depth-%03d.png"%i, "name": "Depth image"},
+            {"href": imdir+"/confidence-%03d.png"%i, "name": "Confidence levels (image)"},
+            {"href": imdir+"/rgbd-%03d.png"%i, "name": "Coloured depth image"},
+            {"href": imdir+"/gscale-%03d.png"%i, "name": "Grey-scale image"}]
 
 
 ############################################################
@@ -194,14 +199,14 @@ def scanAt(x, y, z, pan, tilt, i, files):
     cnc_moveto(x, y, z)
     camera_moveto(pan, tilt)
     time.sleep(10)
-    rgb = "rgb-%03d.png"%(i)
-    depth = "depth-%03d.png"%(i)
-    grab_images("static/scan/" + rgb,
-                "static/scan/" + depth)
-    files.append({"href": "scan/" + rgb,
-                  "name": rgb})
-    files.append({"href": "scan/" + depth,
-                  "name": depth})
+    ims=["rgb", "depth", "confidence", "rgbd", "gscale"]
+    np_arrays=["sync", "uv", "vert"]
+
+    grab_images("static/scan", i)
+    for im in ims: files.append({"href": "scan/" + im +"-%03d.png"%i,
+                                 "name": im +"-%03d.png"%i})
+    for a in np_arrays: files.append({"href": "scan/" + a +"-%03d.npy"%i,
+                                 "name": a +"-%03d.npy"%i})    
     return
 
 def createArchive(files):
@@ -215,8 +220,8 @@ def createArchive(files):
         return {"href": "scan/all.zip", "name": "all.zip"}
 
 def circular_coordinates(cx, cy, R, N):
-   alpha = numpy.linspace(0, 2 * numpy.pi, N + 1)
-   pan = numpy.linspace(0, -360.0, N + 1)
+   alpha = np.linspace(0, 2 * np.pi, N + 1)
+   pan = np.linspace(0, -360.0, N + 1)
    x, y = [], []
    for i in range(0, N):
       x.append(cx + R * math.sin(alpha[i]))
@@ -229,6 +234,7 @@ def circularscan(xc, yc, zc, r, nc):
     files = []    
     x, y, pan = circular_coordinates(xc, yc, r, nc)
     for i in range(0, nc):
+        print i
         scanAt(x[i], y[i], zc, pan[i], tilt, i, files)
     cnc_moveto(x[0], y[0], zc)
     camera_moveto(0, tilt)
@@ -381,19 +387,18 @@ def rest_squarescan():
 @app.route('/grab')
 @app.route('/lettucescan/grab')
 def rest_grab():
-    files = grab_images("%s/rgb.png"%(imdir),
-                        "%s/depth.png"%(imdir))
+    files = grab_images(imdir, 0)
     return jsonify(files)
 
 @app.route('/rgb.png')
 @app.route('/lettucescan/rgb.png')
 def rest_rgb():
-    return send_file("static/img/rgb.png", mimetype='image/png')
+    return send_file("static/img/rgb-000.png", mimetype='image/png')
 
 @app.route('/depth.png')
 @app.route('/lettucescan/depth.png')
 def rest_depth():
-    return send_file("static/img/depth.png", mimetype='image/png')
+    return send_file("static/img/depth-000.png", mimetype='image/png')
 
 ############################################################
 # Utility functions
