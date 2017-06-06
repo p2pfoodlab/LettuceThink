@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Control panel</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/lettucethink.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+
+	<style>
+	span.glyphicon-stop, span.glyphicon-step-forward, span.glyphicon-step-backward {
+	font-size: 48px;
+	}
+
+	#xy-trackpad {
+        position: relative;
+	width: 240px;
+	height: 180px;
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+	-webkit-user-select	: none;
+	-moz-user-select	: none;
+	border: solid black 3px;
+        background-image: url("http://10.10.10.1/lettucesee/depthsense/rgb/?action=stream");
+	}
+	#xy-trackpad-img {
+        position: absolute;
+	width: 240px;
+	height: 180px;
+        top: 0px;
+        left: 0px;
+        z-index: -1;
+	}
+	#z-trackpad {
+	width: 30px;
+	height: 200px;
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+	-webkit-user-select	: none;
+	-moz-user-select	: none;
+	border: solid black 3px;
+	}
+		#info {
+			position	: absolute;
+			top		: 0px;
+			width		: 100%;
+			padding		: 5px;
+			text-align	: center;
+		}
+		#info a {
+			color		: #66F;
+			text-decoration	: none;
+		}
+		#info a:hover {
+			text-decoration	: underline;
+		}
+	</style>
+	
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="row" style="margin-top: 20px">
+	<div class="col-xs-2">
+	  <button type="button" class="btn btn-sm seg btn-block" id="LettuceThinkScan">
+	      <span class="glyphicon glyphicon-leaf"></span>
+   	      <strong>Plan path</strong>
+	      <!--<span class="glyphicon glyphicon-leaf"></span>-->
+	  </button>
+	</div>
+	<div class="col-xs-2">
+	  <button type="button" class="btn btn-sm path btn-block" id="LettuceThinkClean">
+            <span class="glyphicon glyphicon-erase"></span>
+	    <strong>Clean</strong>
+	  </button>
+	</div>
+      </div>
+      
+      <div class="row" style="margin-top: 20px">
+	<div class="col-xs-2">
+	  <button type="button" class="btn btn-sm boustro btn-block" id="LettuceThinkBoustro">
+            <span class="glyphicon glyphicon-menu-hamburger"></span>
+            <strong>Ox path</strong>
+	  </button>
+	</div>
+	<div class="col-xs-2">
+          <button type="button" class="btn btn-sm home btn-block" id="LettuceThinkHoming">
+	      <span class="glyphicon glyphicon-home"></span>
+   	      <strong>Home</strong>
+	  </button>	    
+	</div>
+    </div>
+
+    <div class="row" style="margin-top: 20px">
+	<div class="col-xs-4">
+	  <button type="button" class="btn btn-sm stop btn-block" id="LettuceThinkStop">
+            <span class="glyphicon glyphicon-remove"></span>
+	    <strong>STOP ALL</strong>
+	  </button>
+	</div>
+    </div>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <script>
+    function lettuceThinkScan() {
+	$.get("/lettucethink/scan");
+    }
+
+    function lettuceThinkHoming() {
+	$.get("/lettucethink/homing");
+    }
+    
+    function lettuceThinkClean() {
+	$.get("/lettucethink/clean");
+    }
+
+    function lettuceThinkBoustro() {
+	$.get("/lettucethink/boustro");
+    }
+    
+    function lettuceThinkStop() {
+	$.get("/lettucethink/reset");
+    }   
+    $(function() {
+       $('#LettuceThinkScan').on('click', lettuceThinkScan);
+       $('#LettuceThinkHoming').on('click', lettuceThinkHoming);
+       $('#LettuceThinkBoustro').on('click', lettuceThinkBoustro);
+       $('#LettuceThinkClean').on('click', lettuceThinkClean);
+       $('#LettuceThinkStop').on('click', lettuceThinkStop);
+    });
+    
+    </script>
+    
+
+  </body>
+</html>
+

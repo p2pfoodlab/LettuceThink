@@ -1,0 +1,58 @@
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+	color: #000;  /*Sets the text hover color on navbar*/
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active >
+					    a:hover, .navbar-default .navbar-nav > .active > a:focus {
+	color: grey; /*BACKGROUND color for active*/
+	background-color: #030033;
+}
+
+.navbar-default {
+    background-color: white;
+    border-color: white;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+    color: black;
+    text-decoration: none;
+    background-color: #66CCFF;  /*change color of links in drop down here*/
+}
+
+.nav > li > a:hover,
+.nav > li > a:focus {
+    text-decoration: none;
+    background-color: black; /*Change rollover cell color here*/
+}
+
+
+.navbar-default .navbar-nav > li > a {
+    color: grey; /*Change active text color here*/
+}
+
+.btn.seg{
+   color:#81F781;
+   background:#3B240B; 
+}
+
+.btn.path{
+   color:#F4FA58;
+   background:#3B240B; 
+}
+
+.btn.boustro{
+   color:#A9A9F5;
+   background:#3B240B; 
+}
+
+.btn.home{
+   color:#F7BE81;
+   background:#3B240B; 
+}
+
+.btn.stop{
+   color:#F6CECE;
+   background:#FA5858; 
+}
+

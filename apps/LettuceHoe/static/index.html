@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lettuce view</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/nav-tabs.css" rel="stylesheet">
+    <link href="css/lettucethink.css" rel="stylesheet">
+    <style>
+      #videos {
+        position: relative;      
+      }
+      #topcam-img {
+         position: absolute;
+         width: 1280px;
+         height: 920px;
+         top: 0px;
+         left: 0px;*/
+      }
+      #DS-RGB-img {
+         position: absolute;
+         width: 640px;
+         height: 480px;
+         top: 0px;
+         left: 1280px;
+      }
+      #DS-Depth-img {
+         position: absolute;
+         width: 640px;
+         height: 480px;
+         top: 480px;
+         left: 1280px;
+      }
+
+    </style>    
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">Lettuce view</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">Video</a></li>
+            <li><a href="maps.html">Maps</a></li>
+            <li><a href="cpanel_OH.html">Control Panel </a></li>
+            <li><a href="monitor.html">Power monitor </a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div><!--/.container-fluid -->
+    </nav>
+
+    <div class="container-fluid" id="videos">
+      <div class="row">
+        <img id="topcam-img" src="http://10.10.10.1/lettucesee/raspicam/?action=stream"/>
+      </div>
+    </div> 
+    </div>
+       <script src="js/jquery.min.js"></script>
+       <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
