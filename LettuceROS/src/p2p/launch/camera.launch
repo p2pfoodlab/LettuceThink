@@ -1,0 +1,5 @@
+<launch>
+ <rosparam command="load" file="$(find p2p)/parameter/params.json" />
+ <node name="camera_driver" pkg="p2p" type="camera_driver.py" output="screen" /> 
+ <node name="image_proc" pkg="image_proc" type="image_proc" ns="camera_pi"  output="screen" />
+</launch>
