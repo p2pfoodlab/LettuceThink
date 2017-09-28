@@ -1,0 +1,67 @@
+{
+ "cams": {"url_topcam": "http://10.20.30.2:9000/?action=snapshot"
+         },
+
+  "mask":   {"y"          : "cur",
+             "color index": "myExG",
+             "cbiFilter"  : "bil",
+             "thresh"     : "otsu",
+             "kr"         : 0,
+             "op_it"      : 5,
+             "dil_it"     : 40,
+             "dist"       : 50
+            },
+
+ "svg":    {"svg_dir"     : "/home/pi/server/",
+            "ExG"         : "pics/ExG.jpg",
+            "ExG_mask"    : "pics/ExG_mask.jpg",
+            "Dist_mask"   : "pics/Dist.jpg",
+            "Conts"       : "pics/Conts.jpg",
+            "ToolPath"    : "pics/ToolPath.jpg",
+            "path_data"   : "data/tool_path",
+            "cont_data"   : "data/cont_path"
+           },
+
+ "path":  {"n_sweep"      : 10,
+           "sweep_length" : 700,
+           "step_length"  : 50,
+           "test"         : "/home/p2p/catkin_ws/src/p2p/scripts/data/11a.jpg",
+           "txt"          : "/home/p2p/catkin_ws/src/p2p/scripts/data/toolPath.txt",
+           "img"          : "/home/p2p/catkin_ws/src/p2p/scripts/data/",
+           "txtmod"       : "/home/p2p/catkin_ws/src/p2p/scripts/data/toolPathMod.txt"
+          },
+
+ "path_interp": {"N_fill_points": 5000,
+                 "eps_contours" : 1,
+                 "eps_toolpath" : 1
+                },
+
+ "calib": {"x0"   :  996,
+           "y0"   :  210,
+           "scale":  1.05
+          },
+
+ "tool":  {"feed_rate"   : 5000,
+           "z"           : 0,
+           "rotspeed"    : 12000,
+           "zscan"       : 0
+          },
+
+  "notif": {"port": "/dev/ttyUSB0"
+           },
+
+  "ws_par": [1030,170,700,500],
+
+  "tool_size": 50,
+
+  "resolution": [1024,768],
+
+  "morpho_it": [5,5],
+
+  "th": "None",
+
+  "margin": 0.05
+
+}
+
+

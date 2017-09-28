@@ -1,0 +1,5 @@
+<launch>
+ <node name="killer" pkg="p2p" type="killer.py" required="true" output="screen" />
+ <node name="cnc_node" pkg="p2p" type="cnc_node.py" output="screen" />
+ <node name="comput" pkg="p2p" type="comput.py" output="screen" /> 
+</launch>
