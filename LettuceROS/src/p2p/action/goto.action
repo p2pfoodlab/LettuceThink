@@ -1,7 +1,0 @@
-p2p/Posi data
-float64  x0
-float64  y0
----
-bool success
----
-string pos_cnc
